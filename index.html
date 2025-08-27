@@ -1,0 +1,65 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Retirement Savings Planner</title>
+        <meta name="description" content="Project your retirement savings by simulating monthly contributions and growth over time.">
+        <meta name="keywords" content="retirement savings planner,retirement calculator,compound interest,retirement planning">
+        <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; }
+            h1 { color: #333333; }
+            form { margin-top: 1rem; }
+            label { display: block; margin: 0.5rem 0 0.2rem; font-weight: bold; }
+            input, select { width: 100%; padding: 0.5rem; margin-bottom: 1rem; box-sizing: border-box; }
+            button { padding: 0.5rem 1rem; background-color: #0066cc; color: white; border: none; cursor: pointer; }
+            button:hover { background-color: #004d99; }
+            .result { margin-top: 1rem; background: #f5f5f5; padding: 1rem; border: 1px solid #dddddd; }
+            footer { margin-top: 2rem; font-size: 0.9rem; color: #666666; }
+        </style>
+    </head>
+    <body>
+    
+        <h1>Retirement Savings Planner</h1>
+        <p>Estimate how much you could have saved by the time you retire. Enter your current age, desired retirement age, monthly contribution and expected annual return. Consistent saving and the power of compound interest are key to building a comfortable retirement fund.</p>
+        <form id="retire-form" onsubmit="event.preventDefault(); calculateRetirement();">
+            <label for="currentAge">Current Age</label>
+            <input type="number" id="currentAge" min="0" max="100" required>
+            <label for="retireAge">Retirement Age</label>
+            <input type="number" id="retireAge" min="1" max="100" required>
+            <label for="monthlyContribution">Monthly Contribution (£)</label>
+            <input type="number" id="monthlyContribution" min="0" step="1" required>
+            <label for="annualReturn">Expected Annual Return (%)</label>
+            <input type="number" id="annualReturn" min="0" step="0.1" required>
+            <button type="submit">Calculate</button>
+        </form>
+        <div id="retireResult" class="result" style="display:none;"></div>
+        <h2>Why plan for retirement?</h2>
+        <p>Starting early and contributing regularly can dramatically increase your retirement savings due to compound interest. Even small monthly contributions grow over time. Consider investing in diversified portfolios and reviewing your plan annually. This calculator provides a simple projection based on constant contributions and fixed growth, but actual investment returns vary.</p>
+    <script>
+
+        function calculateRetirement() {
+            const currentAge = parseInt(document.getElementById('currentAge').value);
+            const retireAge = parseInt(document.getElementById('retireAge').value);
+            const monthly = parseFloat(document.getElementById('monthlyContribution').value);
+            const annualReturn = parseFloat(document.getElementById('annualReturn').value) / 100;
+            if (isNaN(currentAge) || isNaN(retireAge) || isNaN(monthly) || isNaN(annualReturn) || retireAge <= currentAge) return;
+            const months = (retireAge - currentAge) * 12;
+            const monthlyRate = annualReturn / 12;
+            let futureValue = 0;
+            for (let i = 0; i < months; i++) {
+                futureValue = (futureValue + monthly) * (1 + monthlyRate);
+            }
+            const resultDiv = document.getElementById('retireResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<strong>Estimated Savings at Age ${retireAge}:</strong> £${futureValue.toFixed(2)}`;
+        }
+    
+</script>
+        <footer>
+            <p>Disclaimer: This tool is for informational purposes only. Please verify any calculations with official sources before making financial or health decisions.</p>
+        </footer>
+    </body>
+    </html>
+    
